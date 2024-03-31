@@ -1,0 +1,62 @@
+
+#include <iostream>
+#include <queue>
+
+const int MAX_SIZE = 100;
+
+bool isBipartite(int graph[MAX_SIZE][MAX_SIZE], int vertices) {
+    // Array to store the color of each vertex (-1 for uncolored, 0 for first color, 1 for second color)
+    int color[MAX_SIZE];
+    for (int i = 0; i < vertices; ++i)
+        color[i] = -1;
+
+    // Start BFS traversal from each vertex
+    for (int i = 0; i < vertices; ++i) {
+        if (color[i] == -1) {
+            color[i] = 0; // Assign first color to the starting vertex
+            std::queue<int> q;
+            q.push(i);
+
+            while (!q.empty()) {
+                int u = q.front();
+                q.pop();
+
+                for (int v = 0; v < vertices; ++v) {
+                    // If there is an edge from u to v and v is not colored
+                    if (graph[u][v] && color[v] == -1) {
+                        // Assign opposite color to vertex v
+                        color[v] = 1 - color[u];
+                        q.push(v);
+                    }
+                    // If there is an edge from u to v and both u and v have same color, graph is not bipartite
+                    else if (graph[u][v] && color[v] == color[u])
+                        return false;
+                }
+            }
+        }
+    }
+
+    // If no conflict found, the graph is bipartite
+    return true;
+}
+
+int main() {
+    int vertices;
+    std::cout << "Enter the number of vertices in the graph: ";
+    std::cin >> vertices;
+
+    int graph[MAX_SIZE][MAX_SIZE];
+    std::cout << "Enter the adjacency matrix of the graph:\n";
+    for (int i = 0; i < vertices; ++i) {
+        for (int j = 0; j < vertices; ++j) {
+            std::cin >> graph[i][j];
+        }
+    }
+
+    if (isBipartite(graph, vertices))
+        std::cout << "Yes, Bipartite\n";
+    else
+        std::cout << "Not Bipartite\n";
+
+    return 0;
+}
