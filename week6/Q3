@@ -1,0 +1,59 @@
+#include <iostream>
+
+const int MAX_SIZE = 100;
+
+bool isCycleUtil(int graph[MAX_SIZE][MAX_SIZE], int vertices, int u, bool visited[], bool stack[]) {
+    // Mark the current vertex as visited and add it to the stack
+    visited[u] = true;
+    stack[u] = true;
+
+    // Traverse all adjacent vertices of vertex u
+    for (int v = 0; v < vertices; ++v) {
+        if (graph[u][v]) {
+            // If the adjacent vertex is not visited, check for cycle in it recursively
+            if (!visited[v] && isCycleUtil(graph, vertices, v, visited, stack))
+                return true;
+            // If the adjacent vertex is already visited and is in the stack, then cycle exists
+            else if (stack[v])
+                return true;
+        }
+    }
+
+    // Remove the current vertex from the stack
+    stack[u] = false;
+    return false;
+}
+
+bool isCycle(int graph[MAX_SIZE][MAX_SIZE], int vertices) {
+    bool visited[MAX_SIZE] = {false};
+    bool stack[MAX_SIZE] = {false};
+
+    // Check for cycle in each vertex
+    for (int i = 0; i < vertices; ++i) {
+        if (!visited[i] && isCycleUtil(graph, vertices, i, visited, stack))
+            return true;
+    }
+
+    return false;
+}
+
+int main() {
+    int vertices;
+    std::cout << "Enter the number of vertices in the graph: ";
+    std::cin >> vertices;
+
+    int graph[MAX_SIZE][MAX_SIZE];
+    std::cout << "Enter the adjacency matrix of the graph:\n";
+    for (int i = 0; i < vertices; ++i) {
+        for (int j = 0; j < vertices; ++j) {
+            std::cin >> graph[i][j];
+        }
+    }
+
+    if (isCycle(graph, vertices))
+        std::cout << "Yes, Cycle Exists\n";
+    else
+        std::cout << "No Cycle Exists\n";
+
+    return 0;
+}
