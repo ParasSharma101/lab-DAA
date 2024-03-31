@@ -1,0 +1,51 @@
+#include<iostream>
+using namespace std;
+
+void findMaxFrequencyElement(char arr[],int size) {
+    int freq[36]={0};
+    char c;
+    for(int j=0; j<size;j++){
+        c=arr[j];
+        if(c>='a'&&c<='z'){
+            freq[c-'a'+10]++;
+        }else{
+            freq[c-'0']++;
+        }
+    }
+    for(int i=0; i<36;i++){
+        cout<<freq[i]<<' ';
+    }
+    cout<<endl;
+    char max_char;
+    int max=0;
+    for(int i=0; i<36;i++){
+            if(freq[i]>max){
+                max=freq[i];
+                if(i<10){
+                    max_char=i+'0';
+                }else{
+                    max_char=(i+'a'-10);
+                }
+            }
+    }
+    cout<<max_char<<'-'<<max;
+}
+
+int main(){
+    int t;
+    cout<<"Enter the number of test cases";
+    cin>>t;
+    while(t){
+        cout<< "Enter the size";
+        int size;
+        cin>>size;
+        char arr[size];
+        cout<<"Enter the Elements";
+        for(int i =0; i<size; i++){
+            cin>>arr[i];
+        }
+        findMaxFrequencyElement(arr,size);
+        t--;
+    }
+    return 0;
+}
