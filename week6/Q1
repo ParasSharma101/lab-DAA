@@ -1,0 +1,58 @@
+#include <iostream>
+using namespace std;
+
+const int MAX_SIZE = 100;
+
+bool isPathExistsDFS(int graph[MAX_SIZE][MAX_SIZE], int vertices, int source, int destination, bool visited[]) {
+    // If source and destination are the same, path exists
+    if (source == destination)
+        return true;
+
+    // Mark the current vertex as visited
+    visited[source] = true;
+
+    // Check all adjacent vertices of the current vertex
+    for (int i = 0; i < vertices; ++i) {
+        // If there is an edge from the current vertex to vertex i and i is not visited
+        if (graph[source][i] && !visited[i]) {
+            // If path exists from vertex i to destination, return true
+            if (isPathExistsDFS(graph, vertices, i, destination, visited))
+                return true;
+        }
+    }
+
+    // If destination is not reachable from source
+    return false;
+}
+
+bool isPathExists(int graph[MAX_SIZE][MAX_SIZE], int vertices, int source, int destination) {
+    // Array to keep track of visited vertices
+    bool visited[MAX_SIZE] = {false};
+
+    // Call the DFS function to check if a path exists from source to destination
+    return isPathExistsDFS(graph, vertices, source, destination, visited);
+}
+
+int main() {
+    int vertices, source, destination;
+    cout << "Enter the number of vertices in the graph: ";
+    cin >> vertices;
+
+    int graph[MAX_SIZE][MAX_SIZE];
+    cout << "Enter the adjacency matrix of the graph:\n";
+    for (int i = 0; i < vertices; ++i) {
+        for (int j = 0; j < vertices; ++j) {
+            std::cin >> graph[i][j];
+        }
+    }
+
+    cout << "Enter the source and destination vertices: ";
+    cin >> source >> destination;
+
+    if (isPathExists(graph, vertices, source, destination))
+        cout << "Yes, Path Exists\n";
+    else
+        cout << "No Such Path Exists\n";
+
+    return 0;
+}
